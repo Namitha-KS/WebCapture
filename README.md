@@ -42,14 +42,6 @@ JavaScript
 [![](https://img.shields.io/badge/Github-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/Namitha-S-11465/WebCapture)
 
 
-
-## Documentation
-
-Link to get the different stages of completion of this project.
-
-[Documentation](https://linktodocumentation)
-
-
 ## Authors
 
 - [Namitha](https://github.com/Namitha-S-11465)
