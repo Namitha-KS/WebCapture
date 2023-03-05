@@ -1,0 +1,40 @@
+"name": "My YT Bookmarks" - This line sets the name of the extension.
+"version": "0.1.0" - This line sets the version of the extension.
+"description": "Saving timestamps in YT videos" - This line sets a brief description of what the extension does.
+"permissions": ["storage", "tabs"] - This line specifies what permissions the extension needs in order to function. In this case, the extension needs access to the browser's storage and tabs.
+"host_permissions": ["https://*.youtube.com/*"] - This line specifies what host permissions the extension needs in order to function. In this case, the extension needs access to YouTube.
+"background": {"service_worker": "background.js"} - This line specifies what script should run in the background of the extension. In this case, the background script is called background.js.
+"content_scripts": [{"matches": ["https://*.youtube.com/*"], "js": ["contentScript.js"]}] - This line specifies what script should run on the content page of the extension. In this case, the content script is called contentScript.js and it runs on YouTube pages.
+"web_accessible_resources": [{"resources": ["assets/bookmark.png", "assets/play.png", "assets/delete.png", "assets/save.png"], "matches": ["https://*.youtube.com/*"]}] - This line specifies what resources should be accessible from the web. In this case, the extension needs access to a few images (bookmarks, play, delete, save) in order to function properly.
+"action": {"default_icon": {"16": "assets/ext-icon.png", "24": "assets/ext-icon.png", "32": "assets/ext-icon.png"}, "default_title": "My YT Bookmarks", "default_popup": "popup.html"} - This line specifies what the extension's icon should look like, what the default title should be, and what popup should be displayed when the icon is clicked.
+"manifest_version": 3 - This line specifies the version of the extension manifest. In this case, it is version 3
+
+
+background.js
+chrome.tabs.onUpdated.addListener((tabId, tab) => {
+
+This line adds a listener to the onUpdated event of the chrome.tabs API. This event is fired when a tab is updated, such as when its URL changes or its title changes. The addListener method takes a callback function as an argument, which will be called when the event is fired.
+
+if (tab.url && tab.url.includes("youtube.com/watch")) {
+
+This line checks if the updated tab has a URL and if the URL contains the string "youtube.com/watch". This is done to ensure that we are only sending a message to the content script when the user is on a YouTube video page.
+
+const queryParameters = tab.url.split("?")[1];
+
+This line extracts the query string from the URL of the updated tab. The split method is used to split the URL at the ? character, which separates the base URL from the query string. We then take the second element of the resulting array, which is the query string.
+
+const urlParameters = new URLSearchParams(queryParameters);
+
+This line creates a new URLSearchParams object from the query string. This object provides a convenient way to access the parameters in the query string.
+
+chrome.tabs.sendMessage(tabId, {
+
+This line sends a message to the content script in the updated tab using the chrome.tabs.sendMessage method. The tabId parameter specifies the ID of the tab to send the message to. The second parameter is an object that contains the message data.
+
+type: "NEW",
+
+This line specifies the type of message that we are sending. In this case, we are sending a "NEW" message to indicate that the user has navigated to a new video page.
+
+videoId: urlParameters.get("v"),
+
+This line includes the video ID in the message data. The video ID is extracted from the query string using the get method of the URLSearchParams object.
